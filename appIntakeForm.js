@@ -1,6 +1,7 @@
 const http = require('http')
 var fs = require('fs');
 var qs = require('querystring');
+var prettyHtml = require('json-pretty-html').default;
 
 const server = http.createServer(function(request, response) {
   console.dir(request.param)
@@ -18,13 +19,14 @@ const server = http.createServer(function(request, response) {
       outputFormatted[post.appName] = {"app_name": post.appName, "tenant": post.uniqId, "app_template": post.appType, "server_port": post.serverPort, "app_fqdn": post.appFqdn, "app_locations": {"datacenter_name": post.appDC, "prod_vip_address": "1.1.1.1", "alternate_vip_address": "2.2.2.2", "pool_members": {"member1": post.poolIP1, "member1state": post.stateIP1, "member2": post.poolIP2, "member2state": post.stateIP2}}};
       var nameOfAppJsonFile = `jsonAppData/${Object.keys(outputFormatted)[0]}_appData.json`;
       fs.writeFileSync(nameOfAppJsonFile, JSON.stringify(outputFormatted));
-      var readFileData = fs.readFileSync(nameOfAppJsonFile, 'utf8');
+      //var readFileData = fs.readFileSync(nameOfAppJsonFile, 'utf8');
       //console.log(readFileData)
+      var prettyJsonHtml = prettyHtml(outputFormatted, outputFormatted);
       var html = `
             <html>
                 <body style="background-color:lightgrey;">
                     </br><h1> Here is what was created: </h1></br></br>
-                    ${readFileData}
+                    ${prettyJsonHtml}
                 </body>
             </html>`
       response.writeHead(200, {'Content-Type': 'text/html'});
@@ -48,23 +50,23 @@ const server = http.createServer(function(request, response) {
                     <option value="tcpApp"> tcp </option>
                     </select></br></br>
                     What's the application's fqdn?  
-                    <input type="text" name="appFqdn" value="xxx.example1.com"/></br></br>
+                    <input type="text" name="appFqdn" value="appX.example1.com"/></br></br>
                     <label for="dataCenters">Select your application's DataCenter:  </label>
                     <select name="appDC" id="dataCenters">
                     <option value="virtual_DataCenter"> virtualDataCenter </option>
                     <option value="dmz_DataCenter"> dmzDataCenter </option>
                     </select></br></br>
-                    Pool server port?  
+                    Server port?  
                     <input type="text" name="serverPort" value="80"/></br></br>
                     First IP of the servers supporting this application?  
-                    <input type="text" name="poolIP1" />
+                    <input type="text" name="poolIP1" value="192.168.1.1"/>
                     <label for="poolIP1state">Enabled or Disabled?  </label>
                     <select name="stateIP1" id="poolIP1state">
                     <option value="enable"> Enable </option>
                     <option value="disable"> Disable </option>
                     </select></br></br>
                     Second IP of the servers supporting this application?  
-                    <input type="text" name="poolIP2" />
+                    <input type="text" name="poolIP2" value="192.168.1.2"/>
                     <label for="poolIP2state">Enabled or Disabled?  </label>
                     <select name="stateIP2" id="poolIP2state">
                     <option value="enable"> Enable </option>

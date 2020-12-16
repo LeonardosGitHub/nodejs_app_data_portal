@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "json-pretty-html": "^1.1.6"
+  }
+}
