@@ -9,22 +9,26 @@ const server = http.createServer(function(request, response) {
     var body = ''
     request.on('data', function(data) {
       body += data
-      console.log('Partial body: ' + body)
+      //console.log('Partial body: ' + body)
     })
     request.on('end', function() {
-      console.log('Body: ' + body)
+      //console.log('Body: ' + body)
       var outputFormatted = {}
       var post = qs.parse(body);
-      // fs.writeFile(post.appName + "_appPostData.txt", body, function (err) {
-      //   if (err) return console.log(err);
-      // });
       outputFormatted[post.appName] = {"app_name": post.appName, "tenant": post.uniqId, "app_template": post.appType, "server_port": post.serverPort, "app_fqdn": post.appFqdn, "app_locations": {"datacenter_name": post.appDC, "prod_vip_address": "1.1.1.1", "alternate_vip_address": "2.2.2.2", "pool_members": {"member1": post.poolIP1, "member1state": post.stateIP1, "member2": post.poolIP2, "member2state": post.stateIP2}}};
       var nameOfAppJsonFile = `jsonAppData/${Object.keys(outputFormatted)[0]}_appData.json`;
-      fs.writeFile(nameOfAppJsonFile, JSON.stringify(outputFormatted, null, " "), function (err) {
-        if (err) return console.log(err);
-      });
+      fs.writeFileSync(nameOfAppJsonFile, JSON.stringify(outputFormatted));
+      var readFileData = fs.readFileSync(nameOfAppJsonFile, 'utf8');
+      //console.log(readFileData)
+      var html = `
+            <html>
+                <body style="background-color:lightgrey;">
+                    </br><h1> Here is what was created: </h1></br></br>
+                    ${readFileData}
+                </body>
+            </html>`
       response.writeHead(200, {'Content-Type': 'text/html'});
-      response.end('post received');
+      response.end(html);
     })
   } else {
     console.log('GET')
@@ -32,12 +36,12 @@ const server = http.createServer(function(request, response) {
             <html>
                 <body style="background-color:lightgrey;">
                     </br><h1>Application Intake</h1>
-                    <form method="post" action="http://localhost:3000">
+                    <form method="post" action="http://localhost:8080">
                     </br></br></br>
                     <b>What's the application unique ID?  
-                    <input type="text" name="uniqId" /></br></br>
+                    <input type="text" name="uniqId" value="tenant12345"/></br></br>
                     What's the application's name?  
-                    <input type="text" name="appName" /></br></br>
+                    <input type="text" name="appName" value="appX"/></br></br>
                     <label for="applicationType">Choose your app type:  </label>
                     <select name="appType" id="applicationType">
                     <option value="httpApp"> http </option>
