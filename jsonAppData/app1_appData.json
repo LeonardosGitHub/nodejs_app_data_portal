@@ -1,0 +1,1 @@
+{"app1":{"app_name":"app1","tenant":"tenant12345","app_template":"httpApp","server_port":"80","app_fqdn":"app1.example1.com","app_locations":{"datacenter_name":"virtual_DataCenter","prod_vip_address":"1.1.1.1","alternate_vip_address":"2.2.2.2","pool_members":{"member1":"192.168.1.1","member1state":"enable","member2":"192.168.1.2","member2state":"enable"}}}}
