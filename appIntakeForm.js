@@ -29,7 +29,7 @@ const server = http.createServer(function(request, response) {
                     ${prettyJsonHtml}
                 </body>
             </html>`
-      var gitCommand = `(../app_repo_via_post/; git status && git add . && git commit -m "commiting change to ${post.AppName}_appData.json" && git push)`
+      var gitCommand = `(cd ../app_repo_via_post/ && git status && git add . && git commit -m "commiting change to ${Object.keys(outputFormatted)[0]}_appData.json" && git push)`
       exec(gitCommand, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
@@ -41,9 +41,6 @@ const server = http.createServer(function(request, response) {
         }
         console.log(`stdout: ${stdout}`);
       });
-      // function writeToGit () {
-
-      // }
       response.writeHead(200, {'Content-Type': 'text/html'});
       response.end(html);
     });
