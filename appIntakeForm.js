@@ -1,7 +1,9 @@
 const http = require('http')
-var fs = require('fs');
-var qs = require('querystring');
-var prettyHtml = require('json-pretty-html').default;
+const fs = require('fs');
+const qs = require('querystring');
+const prettyHtml = require('json-pretty-html').default;
+const { exec } = require("child_process");
+const { getMaxListeners } = require('process');
 
 const server = http.createServer(function(request, response) {
   console.dir(request.param)
@@ -27,11 +29,26 @@ const server = http.createServer(function(request, response) {
                     ${prettyJsonHtml}
                 </body>
             </html>`
+      var gitCommand = `git status, git add ., git commit -m \"commiting change to ${post.AppName}_appData.json\"`
+      exec(gitCommand, (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+      });
+      // function writeToGit () {
+
+      // }
       response.writeHead(200, {'Content-Type': 'text/html'});
       response.end(html);
-    })
+    });
   } else {
-    console.log('GET')
+    console.log('GET');
     var html = `
             <html>
                 <body style="background-color:lightgrey;">
@@ -73,8 +90,8 @@ const server = http.createServer(function(request, response) {
                     <input type="submit" value="Submit" /></br>
                     </form>
                 </body>
-            </html>`
-    response.writeHead(200, {'Content-Type': 'text/html'})
+            </html>`;
+    response.writeHead(200, {'Content-Type': 'text/html'});
     response.end(html)
   }
 })
