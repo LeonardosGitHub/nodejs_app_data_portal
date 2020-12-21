@@ -21,13 +21,13 @@ const server = http.createServer(function(request, response) {
       var serverPortNum = parseInt(post.serverPort)
       //console.log(post);
       outputFormatted[post.appName] = {"app_name": post.appName, "tenant": post.uniqId, "app_template": post.appType, "server_port": serverPortNum, "app_fqdn": post.appFqdn, "app_locations": {"datacenter_name": post.appDC, "prod_vip_address": "1.1.1.1", "alternate_vip_address": "2.2.2.2", "pool_members":[{"ip": post.poolIP1, "state": post.stateIP1}, {"ip": post.poolIP2, "state": post.stateIP2}]}};
-      var nameOfAppJsonFile = `../app_repo_via_post/jsonAppData/${Object.keys(outputFormatted)[0]}_appData.yaml`;
+      var nameOfAppJsonFile = `../app_repo_via_post/${Object.keys(outputFormatted)[0]}_appData.yaml`;
       fs.writeFileSync(nameOfAppJsonFile, yaml.safeDump(outputFormatted));   //outputs data as yaml
       var html = `
             <html>
                 <body style="background-color:lightgrey;">
                     </br><h1> Follow link to view contents of repo, the change you made should appear shortly</h1></br></br>
-                    <h2><a href="https://github.com/LeonardosGitHub/app_repo_via_post/tree/main/jsonAppData" target="_blank">Visit this link to view your change</a></h2>
+                    <h2><a href="https://github.com/LeonardosGitHub/app_repo_via_post/tree/main/" target="_blank">Visit this link to view your change</a></h2>
                 </body>
             </html>`
       var gitCommand = `(cd ../app_repo_via_post/ && git status && git add . && git commit -m "commiting change to ${Object.keys(outputFormatted)[0]}_appData.yaml" && git push)`
