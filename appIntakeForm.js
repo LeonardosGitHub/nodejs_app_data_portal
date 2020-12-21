@@ -19,7 +19,7 @@ const server = http.createServer(function(request, response) {
       var outputFormatted = {}
       var post = qs.parse(body);
       outputFormatted[post.appName] = {"app_name": post.appName, "tenant": post.uniqId, "app_template": post.appType, "server_port": post.serverPort, "app_fqdn": post.appFqdn, "app_locations": {"datacenter_name": post.appDC, "prod_vip_address": "1.1.1.1", "alternate_vip_address": "2.2.2.2", "pool_members": {"member1": post.poolIP1, "member1state": post.stateIP1, "member2": post.poolIP2, "member2state": post.stateIP2}}};
-      var nameOfAppJsonFile = `jsonAppData/${Object.keys(outputFormatted)[0]}_appData.json`;
+      var nameOfAppJsonFile = `../app_repo_via_post/jsonAppData/${Object.keys(outputFormatted)[0]}_appData.json`;
       fs.writeFileSync(nameOfAppJsonFile, JSON.stringify(outputFormatted, null, " "));
       var prettyJsonHtml = prettyHtml(outputFormatted, outputFormatted);
       var html = `
@@ -29,7 +29,7 @@ const server = http.createServer(function(request, response) {
                     ${prettyJsonHtml}
                 </body>
             </html>`
-      var gitCommand = `git status, git add ., git commit -m \"commiting change to ${post.AppName}_appData.json\"`
+      var gitCommand = `(../app_repo_via_post/; git status && git add . && git commit -m "commiting change to ${post.AppName}_appData.json" && git push)`
       exec(gitCommand, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
