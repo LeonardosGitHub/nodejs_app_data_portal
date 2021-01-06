@@ -59,7 +59,7 @@ const server = http.createServer(function(request, response) {
                     <input type="text" name="appName" value="appX"/></br></br>
                     <label for="applicationType">Choose your app type:  </label>
                     <select name="appType" id="applicationType">
-                    <option value="httpApp"> http </option>
+                    <option value="template_as3_web_app"> http </option>
                     <option value="tcpApp"> tcp </option>
                     </select></br></br>
                     What's the application's fqdn?  
