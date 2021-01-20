@@ -20,7 +20,7 @@ const server = http.createServer(function(request, response) {
       var post = qs.parse(body);
       var serverPortNum = parseInt(post.serverPort)
       //console.log(post);
-      outputFormatted[post.appName] = {"app_name": post.appName, "tenant": post.uniqId, "app_template": post.appType, "server_port": serverPortNum, "app_fqdn": post.appFqdn, "app_locations": {"datacenter_name": post.appDC, "prod_vip_address": "1.1.1.1", "alternate_vip_address": "2.2.2.2", "pool_members":[{"ip": post.poolIP1, "state": post.stateIP1}, {"ip": post.poolIP2, "state": post.stateIP2}]}};
+      outputFormatted[post.appName] = {"app_name": post.appName, "tenant": post.uniqId, "app_template": post.appType, "server_port": serverPortNum, "app_fqdn": post.appFqdn, "app_locations": {"datacenter_name": post.appDC, "prod_vip_address": post.prod_vip_address, "alternate_vip_address": post.alternate_vip_address, "pool_members":[{"ip": post.poolIP1, "state": post.stateIP1}, {"ip": post.poolIP2, "state": post.stateIP2}]}};
       var nameOfAppJsonFile = `../app_repo_via_post/${Object.keys(outputFormatted)[0]}.yaml`;
       fs.writeFileSync(nameOfAppJsonFile, yaml.safeDump(outputFormatted));   //outputs data as yaml
       var html = `
@@ -69,6 +69,8 @@ const server = http.createServer(function(request, response) {
                     <option value="virtual_DataCenter"> virtualDataCenter </option>
                     <option value="dmz_DataCenter"> dmzDataCenter </option>
                     </select></br></br>
+                    Virtual Server address: <input type="text" name="prod_vip_address" value="1.1.1.X"/></br></br>
+                    Alternate Virtual Server address: <input type="text" name="alternate_vip_address" value="2.2.2.X"/></br></br>
                     Server port?  
                     <input type="text" name="serverPort" value="80"/></br></br>
                     First IP of the servers supporting this application?  
