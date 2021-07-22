@@ -51,7 +51,7 @@ const server = http.createServer(function(request, response) {
             <html>
                 <body style="background-color:lightgrey;">
                     </br><h1>Application Intake</h1>
-                    <form method="post" action="http://10.254.29.122:8080">
+                    <form method="post" action="http://localhost:8080">
                     </br></br></br>
                     <b>What's the application unique ID?  
                     <input type="text" name="uniqId" value="tenant12345"/></br></br>
@@ -97,6 +97,6 @@ const server = http.createServer(function(request, response) {
 })
 
 const port = 8080
-const host = '10.254.29.122'
+const host = 'localhost'
 server.listen(port, host)
 console.log(`Listening at http://${host}:${port}`)
